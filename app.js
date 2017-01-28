@@ -8,7 +8,9 @@ let bodyParser = require('body-parser');
 let app = express();
 app.use(bodyParser.json({type: 'application/json'}));
 
-const RESPOND_BACK = "respond_back";
+const INTENT_WELCOME = "input.welcome";
+const INTENT_RESPOND_BACK = "respond_back";
+
 const ARG_NAME = "name";
 
 app.post('/', function (req, res) {
@@ -16,13 +18,18 @@ app.post('/', function (req, res) {
   console.log('Request headers: ' + JSON.stringify(req.headers));
   console.log('Request body: ' + JSON.stringify(req.body));
 
+  function init (assistant) {
+    assistant.ask('Sup fam, Budgetbot at your service.')
+  }
+
   function sayName (assistant) {
     let name = assistant.getArgument(ARG_NAME);
     assistant.tell('Your name is ' + name + ".");
   }
 
   let actionMap = new Map();
-  actionMap.set(RESPOND_BACK, sayName);
+  actionMap.set(INTENT_WELCOME, init);
+  actionMap.set(INTENT_RESPOND_BACK, sayName);
 
   assistant.handleRequest(actionMap);
 });
