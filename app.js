@@ -27,9 +27,7 @@ app.post('/', function (req, res) {
   }
 
   function checkBalance (assistant) {
-    assistant.ask("<speak>Your account balance is  " +
-              " <say-as interpret-as='cardinal'>" + assistant.data.cashMoney + "</say-as> " +
-              "  dollars.</speak>");
+    assistant.ask("Your account balance is " + assistant.data.cashMoney + " dollars.");
   }
 
   let actionMap = new Map();
