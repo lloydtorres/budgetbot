@@ -3,6 +3,7 @@
 process.env.DEBUG = 'actions-on-google:*';
 let Assistant = require('actions-on-google').ApiAiAssistant;
 let express = require('express');
+let fuse = require('fuse.js');
 let bodyParser = require('body-parser');
 
 let app = express();
@@ -55,25 +56,34 @@ app.post('/', function (req, res) {
   }
 
   function payBill (assistant) {
-    let billsArray = assistant.data.bills;
+    let fuzzyBillsArray = new Fuse(assistant.data.bills, { keys: ["recepient"] });
     let currentCashMoney = assistant.data.cashMoney;
     let targetBillName = assistant.getArgument(ARG_BILL_NAME);
-    for (var i=0; i < billsArray.length; i++) {
-      let billRecepient = billsArray[i]["recepient"];
-      let billCost = billsArray[i]["cost"];
-      if (billRecepient === targetBillName) {
-        if (billCost <= currentCashMoney) {
-          assistant.data.bills.splice(i, 1);
-          assistant.data.cashMoney = assistant.data.cashMoney - billCost;
-          assistant.ask("Okay, paying " + billCost + " dollars to " + billRecepient + ". You have " + assistant.data.cashMoney + " dollars remaining.");
-        } else {
-          assistant.ask("Whoops, you don't have enough money to pay that bill. The bill is " + billCost + " dollars, and you have " + currentCashMoney + " on hand.");
-        }
+
+    let fuzzyResults = fuzzyBillsArray.search(targetBillName);
+
+    if (fuzzyResults.length > 0) {
+      let billRecepient = fuzzyResults[0]["recepient"];
+      let billCost = fuzzyResults[0]["cost"];
+      if (foundBill["cost"] <= currentCashMoney) {
+        deleteBill(foundBill);
+        assistant.data.cashMoney = assistant.data.cashMoney - billCost;
+        assistant.ask("Okay, paying " + billCost + " dollars to " + billRecepient + ". You have " + assistant.data.cashMoney + " dollars remaining.");
+      } else {
+        assistant.ask("Whoops, you don't have enough money to pay that bill. The bill is " + billCost + " dollars, and you have " + currentCashMoney + " on hand.");
+      }
+    } else {
+      assistant.ask("Sorry, I can't seem to find that bill.");
+    }
+  }
+
+  function deleteBill(targetBill) {
+    for (var i=0; i < assistant.data.bills.length; i++) {
+      if (assistant.data.bills[i]["recepient"] === targetBill["recepient"] && assistant.data.bills[i]["cost"] === targetBill["cost"]) {
+        assistant.data.bills.splice(i, 1);
         return;
       }
     }
-
-    assistant.ask("Sorry, I can't seem to find that bill.");
   }
 
   let actionMap = new Map();
