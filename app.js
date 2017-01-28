@@ -3,7 +3,7 @@
 process.env.DEBUG = 'actions-on-google:*';
 let Assistant = require('actions-on-google').ApiAiAssistant;
 let express = require('express');
-let fuse = require('fuse.js');
+let Fuse = require('fuse.js');
 let bodyParser = require('body-parser');
 
 let app = express();
