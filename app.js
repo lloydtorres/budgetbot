@@ -9,9 +9,7 @@ let app = express();
 app.use(bodyParser.json({type: 'application/json'}));
 
 const INTENT_WELCOME = "input.welcome";
-const INTENT_RESPOND_BACK = "respond_back";
-
-const ARG_NAME = "name";
+const INTENT_CHECK_BALANCE = "check_balance";
 
 app.post('/', function (req, res) {
   const assistant = new Assistant({request: req, response: res});
@@ -19,17 +17,22 @@ app.post('/', function (req, res) {
   console.log('Request body: ' + JSON.stringify(req.body));
 
   function init (assistant) {
-    assistant.ask('Sup fam, Budgetbot at your service.')
+    assistant.ask('Sup fam, Budgetbot at your service.');
+    assistant.data.cashMoney = 2000;
+    assistant.data.bills = [
+      { recepient: "Anime Mystery Box", cost: 50.00 },
+      { recepient: "University of Waterloo Tuition Bill", cost: 8000.00 },
+      { recepient: "Waterloo North Hydro", cost: 120.00 }
+    ];
   }
 
-  function sayName (assistant) {
-    let name = assistant.getArgument(ARG_NAME);
-    assistant.tell('Your name is ' + name + ".");
+  function checkBalance (assistant) {
+    assistant.ask('<speak>Your account balance is <say-as interpret-as="cardinal">' + assistant.data.cashMoney + '</say-as> dollars.</speak>');
   }
 
   let actionMap = new Map();
   actionMap.set(INTENT_WELCOME, init);
-  actionMap.set(INTENT_RESPOND_BACK, sayName);
+  actionMap.set(INTENT_CHECK_BALANCE, checkBalance);
 
   assistant.handleRequest(actionMap);
 });
