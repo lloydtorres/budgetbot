@@ -62,31 +62,24 @@ app.post('/', function (req, res) {
     let targetBillName = assistant.getArgument(ARG_BILL_NAME);
 
     let fuzzyResults = fuzzyBillsArray.search(targetBillName);
-    console.log("INFO: payBill - fuzzySearch successful");
 
     if (fuzzyResults.length > 0) {
-      console.log("INFO: payBill - We found something");
       let foundBill = fuzzyResults[0];
       let billRecepient = foundBill["recepient"];
       let billCost = foundBill["cost"];
       if (billCost <= currentCashMoney) {
-        console.log("INFO: payBill - about to delete bill");
         deleteBill(foundBill);
         assistant.data.cashMoney = assistant.data.cashMoney - billCost;
         assistant.ask("Okay, paying " + billCost + " dollars to " + billRecepient + ". You have " + assistant.data.cashMoney + " dollars remaining.");
-        console.log("INFO: payBill - done");
       } else {
-        console.log("INFO: payBill - costs too much damn money");
-        assistant.ask("Whoops, you don't have enough money to pay that bill. The bill is " + billCost + " dollars, and you have " + currentCashMoney + " on hand.");
+        assistant.ask("Whoops, you don't have enough money to pay that bill. The bill is " + billCost + " dollars, and you have " + currentCashMoney + " dollars on hand.");
       }
     } else {
-      console.log("INFO: payBill - couldn't find anything");
       assistant.ask("Sorry, I can't seem to find that bill.");
     }
   }
 
   function deleteBill(targetBill) {
-    console.log("INFO: payBill - deleting bill");
     for (var i=0; i < assistant.data.bills.length; i++) {
       if (assistant.data.bills[i]["recepient"] === targetBill["recepient"] && assistant.data.bills[i]["cost"] === targetBill["cost"]) {
         assistant.data.bills.splice(i, 1);
