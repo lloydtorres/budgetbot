@@ -66,9 +66,10 @@ app.post('/', function (req, res) {
 
     if (fuzzyResults.length > 0) {
       console.log("INFO: payBill - We found something");
-      let billRecepient = fuzzyResults[0]["recepient"];
-      let billCost = fuzzyResults[0]["cost"];
-      if (foundBill["cost"] <= currentCashMoney) {
+      let foundBill = fuzzyResults[0];
+      let billRecepient = foundBill["recepient"];
+      let billCost = foundBill["cost"];
+      if (billCost <= currentCashMoney) {
         console.log("INFO: payBill - about to delete bill");
         deleteBill(foundBill);
         assistant.data.cashMoney = assistant.data.cashMoney - billCost;
