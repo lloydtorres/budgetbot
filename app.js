@@ -24,6 +24,9 @@ app.post('/', function (req, res) {
       { recepient: "University of Waterloo Tuition Bill", cost: 8000.00 },
       { recepient: "Waterloo North Hydro", cost: 120.00 }
     ];
+    console.log("STATUS: I'm actually being initialized!");
+    console.log("CASHMONEY: " + assistant.data.cashMoney);
+    console.log("BILLS: " + assistant.data.bills);
   }
 
   function checkBalance (assistant) {
