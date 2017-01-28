@@ -24,12 +24,12 @@ app.post('/', function (req, res) {
       { recepient: "Waterloo North Hydro", cost: 120.00 }
     ];
     assistant.ask('Sup fam, Budgetbot at your service.');
-    console.log(JSON.stringify(assistant.data));
   }
 
   function checkBalance (assistant) {
-    console.log(JSON.stringify(assistant.data));
-    assistant.ask('<speak>Your account balance is <say-as interpret-as="cardinal">' + assistant.data.cashMoney + '</say-as> dollars.</speak>');
+    assistant.ask("<speak>Your account balance is  " +
+              " <say-as interpret-as='cardinal'>" + assistant.data.cashMoney + "</say-as> " +
+              "  dollars.</speak>");
   }
 
   let actionMap = new Map();
