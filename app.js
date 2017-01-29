@@ -14,6 +14,7 @@ const INTENT_WELCOME = "input.welcome";
 const INTENT_CHECK_BALANCE = "check_balance";
 const INTENT_CHECK_BILLS = "check_bills";
 const INTENT_PAY_BILL = "pay_bill";
+const INTENT_GET_STOCK_INFO = "get_stock_info";
 
 const ARG_BILL_NAME = "billName";
 const ARG_STOCKS = "stocks";
@@ -117,6 +118,7 @@ app.post('/', function (req, res) {
   actionMap.set(INTENT_CHECK_BALANCE, checkBalance);
   actionMap.set(INTENT_CHECK_BILLS, checkBills);
   actionMap.set(INTENT_PAY_BILL, payBill);
+  actionMap.set(INTENT_GET_STOCK_INFO, getStockInfo);
 
   assistant.handleRequest(actionMap);
 });
