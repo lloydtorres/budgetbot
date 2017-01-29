@@ -5,6 +5,7 @@ let Assistant = require('actions-on-google').ApiAiAssistant;
 let express = require('express');
 let Fuse = require('fuse.js');
 let bodyParser = require('body-parser');
+let yahooFinance = require('yahoo-finance');
 
 let app = express();
 app.use(bodyParser.json({type: 'application/json'}));
@@ -15,6 +16,7 @@ const INTENT_CHECK_BILLS = "check_bills";
 const INTENT_PAY_BILL = "pay_bill";
 
 const ARG_BILL_NAME = "billName";
+const ARG_STOCKS = "stocks";
 
 app.post('/', function (req, res) {
   const assistant = new Assistant({request: req, response: res});
@@ -86,6 +88,23 @@ app.post('/', function (req, res) {
         return;
       }
     }
+  }
+
+  function getStockInfo (assistant) {
+    let stock = assistant.getArgument(ARG_STOCKS);
+    return new Promise(function(resolve, reject) {
+      yahooFinance.snapshot({
+        symbol: stock,
+        fields: ['n', 'l1']
+      }, function (err, snapshot) {
+        if (snapshot) {
+          assistant.ask(snapshot["name"] + " is trading at " + snapshot["lastTradePriceOnly"] + " dollars per share.");
+        } else {
+          assistant.ask("Sorry, I can't seem to load stock data at the moment.");
+          reject(Error("Unable to retrieve stock data."));
+        }
+      })
+    });
   }
 
   let actionMap = new Map();
