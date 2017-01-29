@@ -92,20 +92,15 @@ app.post('/', function (req, res) {
   }
 
   function getStockInfo (assistant) {
-    console.log("INFO: getStockInfo called");
     let stock = assistant.getArgument(ARG_STOCKS);
-    console.log("INFO: argument is " + stock);
     return new Promise(function(resolve, reject) {
-      console.log("INFO: Building promise");
       yahooFinance.snapshot({
         symbol: stock,
         fields: ['n', 'l1']
       }, function (err, snapshot) {
         if (snapshot) {
-          console.log("INFO: Snapshot received");
           assistant.ask(snapshot["name"] + " is trading at " + snapshot["lastTradePriceOnly"] + " dollars per share.");
         } else {
-          console.log("INFO: Erroring out");
           assistant.ask("Sorry, I can't seem to load stock data at the moment.");
           reject(Error("Unable to retrieve stock data."));
         }
