@@ -75,7 +75,7 @@ app.post('/', function (req, res) {
         assistant.data.cashMoney = assistant.data.cashMoney - billCost;
         assistant.ask("Okay, paying $" + billCost + " to " + billRecepient + ". You have $" + assistant.data.cashMoney + " remaining.");
       } else {
-        assistant.ask("Whoops, you don't have enough money to pay that bill. The bill is $" + billCost + " , and you have $" + currentCashMoney + " on hand.");
+        assistant.ask("Whoops, you don't have enough money to pay that bill. The bill is $" + billCost + ", and you have $" + currentCashMoney + " on hand.");
       }
     } else {
       assistant.ask("Sorry, I can't seem to find that bill.");
