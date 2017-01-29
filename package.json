@@ -1,6 +1,6 @@
 {
-  "name": "safetybot",
-  "description": "Get local crime stats. Built at #DeltaHacks3.",
+  "name": "Budgetbot",
+  "description": "Banking for millennials. Built at #DeltaHacks3.",
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
@@ -17,7 +17,8 @@
     "body-parser": "^1.15.2",
     "express": "^4.13.4",
     "actions-on-google": "^1.0.0",
-    "fuse.js": "^2.6.1"
+    "fuse.js": "^2.6.1",
+    "yahoo-finance": "^0.2.16"
   },
   "devDependencies": {
     "semistandard": "^9.1.0"
