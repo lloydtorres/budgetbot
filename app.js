@@ -35,7 +35,7 @@ app.post('/', function (req, res) {
   }
 
   function checkBalance (assistant) {
-    assistant.ask("Your account balance is " + assistant.data.cashMoney + " dollars.");
+    assistant.ask("Your account balance is $" + assistant.data.cashMoney + ".");
   }
 
   function checkBills (assistant) {
@@ -45,7 +45,7 @@ app.post('/', function (req, res) {
       statement = "The following bills are due by the end of the month: ";
       for (var i=0; i < billsArray.length; i++) {
         let bill = billsArray[i];
-        statement = statement + bill["recepient"] + " at " + bill["cost"] + " dollars";
+        statement = statement + bill["recepient"] + " at $" + bill["cost"];
         if (i == billsArray.length - 1) {
           statement = statement + ".";
         } else if (i == billsArray.length - 2) {
@@ -73,9 +73,9 @@ app.post('/', function (req, res) {
       if (billCost <= currentCashMoney) {
         deleteBill(foundBill);
         assistant.data.cashMoney = assistant.data.cashMoney - billCost;
-        assistant.ask("Okay, paying " + billCost + " dollars to " + billRecepient + ". You have " + assistant.data.cashMoney + " dollars remaining.");
+        assistant.ask("Okay, paying $" + billCost + " to " + billRecepient + ". You have $" + assistant.data.cashMoney + " remaining.");
       } else {
-        assistant.ask("Whoops, you don't have enough money to pay that bill. The bill is " + billCost + " dollars, and you have " + currentCashMoney + " dollars on hand.");
+        assistant.ask("Whoops, you don't have enough money to pay that bill. The bill is $" + billCost + " , and you have $" + currentCashMoney + " on hand.");
       }
     } else {
       assistant.ask("Sorry, I can't seem to find that bill.");
@@ -99,7 +99,7 @@ app.post('/', function (req, res) {
         fields: ['n', 'l1']
       }, function (err, snapshot) {
         if (snapshot) {
-          assistant.ask(snapshot["name"] + " is trading at " + snapshot["lastTradePriceOnly"] + " dollars per share.");
+          assistant.ask(snapshot["name"] + " is trading at $" + snapshot["lastTradePriceOnly"] + " per share.");
         } else {
           assistant.ask("Sorry, I can't seem to load stock data at the moment.");
           reject(Error("Unable to retrieve stock data."));
